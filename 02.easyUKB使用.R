@@ -925,6 +925,22 @@ PhenotypicAge=calculate_PhenotypicAge(path=NULL, instance = 0)
 # 基于NHANESIII训练
 BioAges=calculate_BioAges(path=NULL)
 
+################计算生物年龄加速################
+# extreme_threshold:Z 分数阈值
+# 默认 1.5，用于定义极端衰老和极端年轻的样本
+# method:计算方法
+# "linear"：线性回归残差（默认）
+# "lowess"：局部加权回归残差（LOWESS/LOESS）
+# 使用 loess 函数，参数 span = 2/3、degree = 2、family = "symmetric"
+# "direct"：直接差值（生物学年龄 - 实际年龄）
+BioAge_Acceleration <- calculate_BioAge_Acceleration(data=df, 
+                                                     chronological_age="Age",
+                                                     biological_age="phenoage", 
+                                                     sex = "Sex", #注释掉就不按性别分层回归
+                                                     extreme_threshold = 1.5,
+                                                     method="linear",
+                                                     id = "eid")
+
 ################环境污染################
 #####水质
 # Field ID	Description
@@ -1044,6 +1060,17 @@ processed_data <- sun_exposure_data(data)
 ################40个遗传主成分################
 # Genetic principal components 遗传主成分（共40个，一般纳入前20个做协变量）
 GPC=Genetic_principal_components(n=20)
+
+################读取处理蛋白组数据################
+protein_data=extract_protein_data(path = NULL, 
+                                  instance = 0,
+                                  threshold_protein = 20,
+                                  threshold_sample = 50,
+                                  impute = c("median"))
+# 提取list里的蛋白统计数据
+proteins_stats=as.data.frame(protein_data$stats)
+# 提取list里的蛋白数据
+proteins=protein_data$filtered_data
 
 ################提取蛋白组学的技术因素协变量和常见人口、生活协变量################
 olink_covariates=Proteomics_covariate()
