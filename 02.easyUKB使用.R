@@ -12,7 +12,7 @@ set_data_path(path)
 ################定义xx疾病需要提取的id
 # id=read.xlsx("心脏病诊断ID.xlsx")
 # colnames(id)[1]='ID'
-# data <- batch_merge_data_optimized(id_list = id$ID)
+# data=batch_merge_data_optimized(id_list = id$ID)
 
 ################提取时间################
 # p34	Year of birth
@@ -63,7 +63,7 @@ Self_report_drug_p6154_p10004_p10005=merge_col(Self_report_drug_p6154_p10004(),
 
 ################诊断2 访谈 Verbal interview诊断 20002非癌症################
 # 1. 准备疾病列表
-disease_list <- list(
+disease_list=list(
   # 糖尿病视网膜病变
   Diabetic_retinopathy = c("1276"),
   # 糖尿病神经病变
@@ -79,7 +79,7 @@ disease_list <- list(
 )
 # 批量处理所有疾病
 # 48种慢性疾病的Field Code列表（参考PDF文档）
-disease_list <- list(
+disease_list=list(
   # 1. 高血压
   Hypertension = c("1065", "1072"),
   # 2. 抑郁症
@@ -157,10 +157,10 @@ disease_list <- list(
   # 38. 年龄相关性黄斑变性
   AMD = c("1528"))
 
-verbal_interview_diagnosis <- easyUKB:::p20002_verbal_interview_diagnosis(path=path,disease_list,instances=0)
+verbal_interview_diagnosis=easyUKB:::p20002_verbal_interview_diagnosis(path=path,disease_list,instances=0)
 
 ################诊断2 访谈 Verbal interview诊断 20001癌症################
-# disease_list <- list(
+# disease_list=list(
 #   # 39. 肺癌
 #   Lung_Cancer = c("1001"),
 #   # 40. 非黑色素瘤皮肤癌
@@ -192,7 +192,7 @@ verbal_interview_diagnosis <- easyUKB:::p20002_verbal_interview_diagnosis(path=p
 # cancer_verbal_interview_diagnosis=p20001_verbal_interview_diagnosis(path=path,disease_list,instances=0)
 
 # 1. 首先定义所有癌症编码
-all_cancer_codes <- c(
+all_cancer_codes=c(
   "1001", "1002", "1003", "1004", "1005", "1006", "1007", "1008", "1009", "1010",
   "1011", "1012", "1015", "1016", "1017", "1018", "1019", "1020", "1021", "1022",
   "1023", "1024", "1025", "1026", "1027", "1028", "1029", "1030", "1031", "1032",
@@ -204,7 +204,7 @@ all_cancer_codes <- c(
   "1088"
 )
 # 2. 定义特定癌症组（包含其所有子类型）
-specific_groups <- list(
+specific_groups=list(
   # 肺癌（包含小细胞、非小细胞）
   Lung_Cancer = c("1001", "1027", "1028"),
   # 非黑色素瘤皮肤癌（包含基底细胞癌、鳞状细胞癌、啮齿性溃疡）
@@ -225,16 +225,16 @@ specific_groups <- list(
   Breast_cancer = "1002"
 )
 # 3. 其他癌症 = 所有编码 - 特定组中已包含的编码
-used_codes <- unique(unlist(specific_groups))
-Other_cancers <- setdiff(all_cancer_codes, used_codes)
+used_codes=unique(unlist(specific_groups))
+Other_cancers=setdiff(all_cancer_codes, used_codes)
 # 4. 最终 disease_list
-disease_list <- c(specific_groups, list(Other_cancers = Other_cancers))
+disease_list=c(specific_groups, list(Other_cancers = Other_cancers))
 # 5. 提取所有癌症数据
 cancer_verbal_interview_diagnosis=easyUKB:::p20001_verbal_interview_diagnosis(path=path,disease_list,instances=0)
 
 ################诊断2 访谈 Verbal interview手术################
 # 准备手术列表
-operation_list <- list(
+operation_list=list(
   # 糖尿病视网膜病变
   Diabetic_retinopathy = c("1437"),
   # 糖尿病神经病变
@@ -249,7 +249,7 @@ operation_list <- list(
   Peripheral_artery_disease = c("1104","1108","1110","1440","1441","1442")
 )
 # 批量处理所有手术
-verbal_interview_operation_diagnosis <- easyUKB:::p20004_verbal_interview_batch(operation_list,instances = 0)
+verbal_interview_operation_diagnosis=easyUKB:::p20004_verbal_interview_batch(operation_list,instances = 0)
 
 ################诊断2 访谈 Verbal interview药物################
 # 提取数据
@@ -331,7 +331,7 @@ blood_pressure=diagnose_hypertension_byBP(instances=0)
 Algorithmically_defined_outcomes=Algorithmically_defined_outcomes()
 
 ################输入ICD10编码list################
-ICD10_code_list <- list(
+ICD10_code_list=list(
   # Heart_failure = c("I50","I500","I501","I509"),
   # MACE = c("I20","I200", "I201", "I208", "I209",
   #          "I21","I210","I211","I212","I213","I214","I219",
@@ -374,7 +374,7 @@ ICD10_code_list <- list(
   Diabetic_retinopathy  = c("E103","E113","E143","H280","H360")
 ) 
 
-# ICD10_code_list <- list(
+# ICD10_code_list=list(
 #   gestational_diabetes = c("O244"),
 #   congenital_heart_disease = c("Q20", "Q200", "Q201", "Q202", "Q203", "Q204", "Q205", "Q206", "Q208","Q209",
 #                                "Q21", "Q210", "Q211", "Q212", "Q213", "Q214", "Q218", "Q219",
@@ -403,7 +403,7 @@ ICD10_code_list <- list(
 # )
 
 # 48种慢性疾病的ICD-10编码列表
-ICD10_code_list <- list(
+ICD10_code_list=list(
   # 1. 高血压
   Hypertension = c("I10", "I110", "I119", "I12", "I120", "I129", "I13", "I130", 
                    "I131", "I132", "I139", "I15", "I150", "I151", "I152", 
@@ -491,7 +491,7 @@ ICD10_code_list <- list(
   AMD = c("H353")
 )
 
-ICD10_code_list <- list(
+ICD10_code_list=list(
   # 39 肺癌
   Lung_Cancer = "C34",
   # 40 非黑色素瘤皮肤癌
@@ -518,7 +518,7 @@ ICD10_code_list <- list(
                     "C95", "C96", "C97")
 )
 # 单行代码扩展
-ICD10_code_list <- lapply(ICD10_code_list, function(codes) {
+ICD10_code_list=lapply(ICD10_code_list, function(codes) {
   unique(unlist(lapply(codes, function(code) {
     if (nchar(code) == 3) c(code, paste0(code, 0:9)) else code
   })))
@@ -530,7 +530,7 @@ First_occurrences_diag_date=First_occurrences_multiple_disease_diagnosis(path=pa
 
 ################诊断6 死亡原因和日期年龄################
 # 创建诊断列
-Death <- death_diagnosis(time, ICD10_code_list)
+Death=death_diagnosis(time, ICD10_code_list)
 
 ################诊断7 住院诊断和首次住院日期################
 # 一次性处理所有非癌症疾病 这里只有最细的诊断
@@ -539,7 +539,7 @@ Hospital_Diag = Hospital_inpatient_Diagnoses_date_ICD10(path=path,ICD10_code_lis
 Cancer_Diag = Hospital_cancer_Diagnoses_date_ICD10(path=path,ICD10_code_list)
 
 ################输入ICD9编码list################
-ICD9_code_list <- list(
+ICD9_code_list=list(
   Diabetic_kidney_disease = c("8421","E90501", "3009", "E90503",
                               "E90504","E90506", "E90505"),
   Diabetic_neuropathy   = c("V501","V744","V740","V749",
@@ -575,7 +575,7 @@ Hospital_operative_Diag = Hospital_operative_Diagnoses_date_ICD10(operative_list
 
 ################使用患病时date计算单一疾病随访时间################
 # 1. Diabetic_retinopathy (糖尿病视网膜病变)
-diabetic_retinopathy_result <- combine_diseases_and_date(
+diabetic_retinopathy_result=combine_diseases_and_date(
   date_columns = list(
     Death$Diabetic_retinopathy_date,
     Hospital_Diag$Diabetic_retinopathy_date,
@@ -590,7 +590,7 @@ diabetic_retinopathy_result <- combine_diseases_and_date(
 )
 
 # 2. Diabetic_neuropathy (糖尿病神经病变)
-diabetic_neuropathy_result <- combine_diseases_and_date(
+diabetic_neuropathy_result=combine_diseases_and_date(
   date_columns = list(
     Death$Diabetic_neuropathy_date,
     Hospital_Diag$Diabetic_neuropathy_date,
@@ -606,7 +606,7 @@ diabetic_neuropathy_result <- combine_diseases_and_date(
 
 # 3. Diabetic_kidney_disease (糖尿病肾病)
 # 注意：这里包括了 Algorithmically_defined_outcomes 中的 End_stage_renal_disease
-diabetic_kidney_disease_result <- combine_diseases_and_date(
+diabetic_kidney_disease_result=combine_diseases_and_date(
   date_columns = list(
     First_occurrences_diag_date$Diabetic_kidney_disease_date,
     Death$Diabetic_kidney_disease_date,
@@ -626,7 +626,7 @@ diabetic_kidney_disease_result <- combine_diseases_and_date(
 
 # 4. Coronary_heart_disease (冠心病)
 # 注意：这里包括了 Algorithmically_defined_outcomes 中的 Myocardial_infarction
-coronary_heart_disease_result <- combine_diseases_and_date(
+coronary_heart_disease_result=combine_diseases_and_date(
   date_columns = list(
     First_occurrences_diag_date$Coronary_heart_disease_date,
     Death$Coronary_heart_disease_date,
@@ -646,7 +646,7 @@ coronary_heart_disease_result <- combine_diseases_and_date(
 
 # 5. Stroke (卒中)
 # 注意：这里包括了 Algorithmically_defined_outcomes 中的 Stroke
-stroke_result <- combine_diseases_and_date(
+stroke_result=combine_diseases_and_date(
   date_columns = list(
     First_occurrences_diag_date$Stroke_date,
     Death$Stroke_date,
@@ -665,7 +665,7 @@ stroke_result <- combine_diseases_and_date(
 )
 
 # 6. Peripheral_artery_disease (外周动脉疾病)
-peripheral_artery_disease_result <- combine_diseases_and_date(
+peripheral_artery_disease_result=combine_diseases_and_date(
   date_columns = list(
     First_occurrences_diag_date$Peripheral_artery_disease_date,
     Death$Peripheral_artery_disease_date,
@@ -681,7 +681,7 @@ peripheral_artery_disease_result <- combine_diseases_and_date(
   new_name = "Peripheral_artery_disease"
 )
 
-final_combined_date <- combine_disease_dates(time,
+final_combined_date=combine_disease_dates(time,
                                              diabetic_retinopathy_result,
                                              diabetic_neuropathy_result,
                                              diabetic_kidney_disease_result,
@@ -694,7 +694,7 @@ write.csv(final_combined_date, "combined_diseases_date_data.csv", row.names = FA
 
 ################使用患病时age计算单一疾病随访时间################
 # 1. Diabetic_retinopathy (糖尿病视网膜病变)
-diabetic_retinopathy_age_result <- combine_diseases_and_age(
+diabetic_retinopathy_age_result=combine_diseases_and_age(
   age_columns = list(
     verbal_interview_diagnosis$Diabetic_retinopathy_age,
     verbal_interview_operation_diagnosis$Diabetic_retinopathy_age,
@@ -709,7 +709,7 @@ diabetic_retinopathy_age_result <- combine_diseases_and_age(
 )
 
 # 2. Diabetic_neuropathy (糖尿病神经病变)
-diabetic_neuropathy_age_result <- combine_diseases_and_age(
+diabetic_neuropathy_age_result=combine_diseases_and_age(
   age_columns = list(
     verbal_interview_diagnosis$Diabetic_neuropathy_age,
     verbal_interview_operation_diagnosis$Diabetic_neuropathy_age
@@ -722,7 +722,7 @@ diabetic_neuropathy_age_result <- combine_diseases_and_age(
 )
 
 # 3. Diabetic_kidney_disease (糖尿病肾病)
-diabetic_kidney_disease_age_result <- combine_diseases_and_age(
+diabetic_kidney_disease_age_result=combine_diseases_and_age(
   age_columns = list(
     verbal_interview_diagnosis$Diabetic_kidney_disease_age,
     verbal_interview_operation_diagnosis$Diabetic_kidney_disease_age
@@ -737,19 +737,19 @@ diabetic_kidney_disease_age_result <- combine_diseases_and_age(
 # 4. Coronary_heart_disease (冠心病)
 # 注意：Self_report_diagnosis中有heart_attack和angina，需要合并
 # 首先创建合并的冠心病诊断列
-heart_attack_diagnosis <- ifelse(is.na(Self_report_diagnosis$heart_attack), 0, Self_report_diagnosis$heart_attack)
-angina_diagnosis <- ifelse(is.na(Self_report_diagnosis$angina), 0, Self_report_diagnosis$angina)
-self_report_chd_diagnosis <- as.integer(heart_attack_diagnosis == 1 | angina_diagnosis == 1)
+heart_attack_diagnosis=ifelse(is.na(Self_report_diagnosis$heart_attack), 0, Self_report_diagnosis$heart_attack)
+angina_diagnosis=ifelse(is.na(Self_report_diagnosis$angina), 0, Self_report_diagnosis$angina)
+self_report_chd_diagnosis=as.integer(heart_attack_diagnosis == 1 | angina_diagnosis == 1)
 
 # 获取最小年龄
-self_report_chd_age <- pmin(
+self_report_chd_age=pmin(
   Self_report_diagnosis$heart_attack_age,
   Self_report_diagnosis$angina_age,
   na.rm = TRUE
 )
-self_report_chd_age[self_report_chd_diagnosis == 0] <- NA
+self_report_chd_age[self_report_chd_diagnosis == 0]=NA
 
-coronary_heart_disease_age_result <- combine_diseases_and_age(
+coronary_heart_disease_age_result=combine_diseases_and_age(
   age_columns = list(
     verbal_interview_diagnosis$Coronary_heart_disease_age,
     verbal_interview_operation_diagnosis$Coronary_heart_disease_age,
@@ -764,7 +764,7 @@ coronary_heart_disease_age_result <- combine_diseases_and_age(
 )
 
 # 5. Stroke (卒中)
-stroke_age_result <- combine_diseases_and_age(
+stroke_age_result=combine_diseases_and_age(
   age_columns = list(
     verbal_interview_diagnosis$Stroke_age,
     verbal_interview_operation_diagnosis$Stroke_age,
@@ -779,7 +779,7 @@ stroke_age_result <- combine_diseases_and_age(
 )
 
 # 6. Peripheral_artery_disease (外周动脉疾病)
-peripheral_artery_disease_age_result <- combine_diseases_and_age(
+peripheral_artery_disease_age_result=combine_diseases_and_age(
   age_columns = list(
     verbal_interview_diagnosis$Peripheral_artery_disease_age,
     verbal_interview_operation_diagnosis$Peripheral_artery_disease_age
@@ -791,7 +791,7 @@ peripheral_artery_disease_age_result <- combine_diseases_and_age(
   new_name = "Peripheral_artery_disease"
 )
 
-final_combined_age <- combine_disease_ages(time,
+final_combined_age=combine_disease_ages(time,
                                            diabetic_retinopathy_age_result,
                                            diabetic_neuropathy_age_result,
                                            diabetic_kidney_disease_age_result,
@@ -802,35 +802,35 @@ final_combined_age <- combine_disease_ages(time,
 write.csv(final_combined_age, "combined_diseases_age_data.csv", row.names = FALSE)
 
 ################合并age随访时间和date随访时间################
-combined_result <- merge_disease_dataframes(final_combined_date, final_combined_age)
+combined_result=merge_disease_dataframes(final_combined_date, final_combined_age)
 write.csv(combined_result, "combined_result.csv", row.names = FALSE)
 
 ################批量合并age随访时间和date随访时间################
 # 将数据源放入一个列表中
-diag_date_list <- list(
+diag_date_list=list(
   Death = Death,
   Hospital_Diag = Hospital_Diag,
   verbal_interview_diagnosis = verbal_interview_diagnosis,
   First_occurrences_diag_date = First_occurrences_diag_date
 )
 # 使用函数自动合并所有疾病
-all_disease_date_results <- combine_all_diseases_date(diag_date_list)
-all_disease_date_results <- cbind(all_disease_date_results, time[, c(
+all_disease_date_results=combine_all_diseases_date(diag_date_list)
+all_disease_date_results=cbind(all_disease_date_results, time[, c(
   "baseline_age", "baseline_date", "blood_time0", 
   "blood_time_age", "outcome_age", "outcome_time")]) %>% 
   dplyr::rename(blood_time = blood_time0)
-all_disease_date_results <- process_date_dataframe(all_disease_date_results)
+all_disease_date_results=process_date_dataframe(all_disease_date_results)
 # 保存到CSV文件
 write.csv(all_disease_date_results, "48种慢性疾病随访_diseases_date.csv", row.names = FALSE)
 
-all_disease_age_results <- combine_all_diseases_age(diag_date_list)
-all_disease_age_results <- cbind(all_disease_age_results, time[, c(
+all_disease_age_results=combine_all_diseases_age(diag_date_list)
+all_disease_age_results=cbind(all_disease_age_results, time[, c(
   "baseline_age", "baseline_date", "blood_time0", 
   "blood_time_age", "outcome_age", "outcome_time")])
-all_disease_age_results <- process_age_dataframe(all_disease_age_results)
+all_disease_age_results=process_age_dataframe(all_disease_age_results)
 write.csv(all_disease_age_results, "48种慢性疾病随访_diseases_age.csv", row.names = FALSE)
 
-combined_result <- merge_disease_dataframes(all_disease_date_results, all_disease_age_results)
+combined_result=merge_disease_dataframes(all_disease_date_results, all_disease_age_results)
 write.csv(combined_result, "48种慢性疾病随访_combined_result.csv", row.names = FALSE)
 
 ################人口学&血检&协变量################
@@ -858,11 +858,24 @@ demo=list(age_sex_income(),
 ) %>% purrr::reduce(full_join,by="eid")
 write.csv(demo, "demo.csv", row.names = FALSE)
 
+################肌酐与胱抑素C比值(CCR)及标准化NCCR################
+CCR=calculate_CCR(instance = 0)
+
+################肌酐与胱抑素C估算肾小球滤过率的差值################
+delta_eGFR_cysc_scr=calculate_delta_eGFR()
+
 ################CKM综合征0-3期基线诊断################
 CKM_stage=calculate_CKM_stage(path = NULL,instance = 0,
                               uacr_col = "uacr_mg_g",
                               abdominal_obesity_criteria = "AHA_metabolic",
                               ckd_method = "ckm_categories")
+
+################睡眠不足################
+sleep=extract_sleep_durations(path = NULL,instance = 0,hours=6)
+
+
+################代谢综合征基线诊断################
+mets_data=calculate_metabolic_syndrome(instance = 0)
 
 ################CKD################
 CKD_stage=easyUKB::calculate_CKD_stage(path=path,instance=0,
@@ -881,8 +894,36 @@ baseline_hypertension=diagnose_baseline_hypertension(instance=0)
 ################7种胰岛素抵抗指标################
 IR_indices=calculate_IR_indices(instance=0)
 
+################估计葡萄糖处理率 (eGDR)################
+eGDR=calculate_eGDR(path = "./ukb", instance = 0)
+
+################一站式计算多种衍生指标################
+data(Derived_Variable_Description)
+All_Derived_Indices=calculate_All_Derived_Indices(instance = 0)
+
+################计算应激性高血糖比值SHR################
+SHR=calculate_SHR(instance = 0)
+
+################计算附肢骨骼肌质量 (ASM)################
+ASM=calculate_ASM(instance = 0)
+
+################肥胖代谢异质性 (MHO) 表型分类################
+MHO=calculate_MHO(instance = 0)
+
+################按种族划分的 BMI 分组################
+BMI_group=calculate_BMI_group(instance = 0)
+
+################计算心率压力积 (RPP)################
+RPP=calculate_RPP(instance = 0)
+
+################计算估计脉搏波速度 (ePWV)################
+ePWV=calculate_ePWV(instance = 0)
+
+################血常规与血生化数据计算多种衍生指标################
+Derive_Blood_Indices=easyUKB::calculate_Derive_Blood_Indices(instance = 0)
+
 ################9种肥胖相关体型指标################
-obesity_indices=calculate_obesity_indices(instance=0)
+obesity_indices=easyUKB::calculate_obesity_indices(instance=0)
 
 ################AHA Prevent方程10年心血管风险################
 Prevent_CVD_Risk=easyUKB::calculate_Prevent_CVD_Risk(instances=0)
@@ -933,7 +974,7 @@ BioAges=calculate_BioAges(path=NULL)
 # "lowess"：局部加权回归残差（LOWESS/LOESS）
 # 使用 loess 函数，参数 span = 2/3、degree = 2、family = "symmetric"
 # "direct"：直接差值（生物学年龄 - 实际年龄）
-BioAge_Acceleration <- calculate_BioAge_Acceleration(data=df, 
+BioAge_Acceleration=calculate_BioAge_Acceleration(data=df, 
                                                      chronological_age="Age",
                                                      biological_age="phenoage", 
                                                      sex = "Sex", #注释掉就不按性别分层回归
@@ -1020,7 +1061,7 @@ greenspace=greenspace()
 # 10105	Internet user (pilot)
 # 10114	Willing to be contacted by email (pilot)
 # 应用处理函数
-electronic_device_use <- electronic_device_use()
+electronic_device_use=electronic_device_use()
 
 ################家族史和家庭人员生存状态和年龄################
 #### 家庭人员生存状态和年龄
@@ -1032,13 +1073,13 @@ electronic_device_use <- electronic_device_use()
 # p1845_i0	Mother's age
 # p3526_i0	Mother's age at death
 # p4501_i0	Non-accidental death in close genetic family
-family_survival_status <- family_survival_status()
+family_survival_status=family_survival_status()
 
 #### 家族史
 # p20107_i0	Illnesses of father
 # p20110_i0	Illnesses of mother
 # p20111_i0	Illnesses of siblings
-family_illnesses <- family_illnesses()
+family_illnesses=family_illnesses()
 Family_history=family_illnesses[["Family_history"]]
 Father_history=family_illnesses[["Father"]]
 Mother_history=family_illnesses[["Mother"]]
@@ -1055,7 +1096,7 @@ Mother_history=family_illnesses[["Mother"]]
 # p2267_i0	使用防晒产品	Sun/UV_protection_use
 # p2277_i0	使用日光浴床/太阳灯的频率	Frequency_of_solarium/sunlamp_use
 # 处理日晒相关变量
-processed_data <- sun_exposure_data(data)
+processed_data=sun_exposure_data(data)
 
 ################40个遗传主成分################
 # Genetic principal components 遗传主成分（共40个，一般纳入前20个做协变量）
@@ -1100,7 +1141,7 @@ demo=list(age_sex_income(),
 ) %>% purrr::reduce(full_join,by="eid")
 
 # 提取所有推荐变量
-selected_vars <- c(
+selected_vars=c(
   # 人口统计学和基本特征
   "eid", "Age", "Sex", "Income", "Education", "Townsend_deprivation_index", "Ethnicity",
   # 体格测量
@@ -1120,7 +1161,7 @@ selected_vars <- c(
   "ALT(U/L)", "AST(U/L)", "GGT(U/L)", "ALP(U/L)", "TBIL(umol/L)", "DBIL(umol/L)"
 )
 # 提取数据子集
-demo_selected <- demo[, ..selected_vars]  # 使用data.table语法
+demo_selected=demo[, ..selected_vars]  # 使用data.table语法
 demo_selected=merge(demo_selected,Diabetes_duration,by='eid')
 
 write.csv(demo_selected, "糖尿病大血管病变临床预测模型指标.csv", row.names = FALSE)
