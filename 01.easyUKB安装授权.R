@@ -3,12 +3,14 @@
 install.packages("easyUKBhelp_1.0.0.zip", repos = NULL, type = "binary")
 # install.packages("easyUKBhelp_1.0.0.tar.gz", repos = NULL, type = "scoure")
 library(easyUKBhelp)
+# 安装依赖包
+install_project_packages()
 
 # 2. 获取机器码 发给作者
 easyUKBhelp:::guide_activation()
 
 # 3. 待作者操作授权后
-easyUKBhelp:::install_easyUKB(github_token = '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', 
+easyUKBhelp:::install_easyUKB(github_token = 'ghp_sxliuojKCI2Uc5dZ', 
                               server_url = 'http://8.155.15.248:8503')
 
 # 4. 安装成功后尝试加载
