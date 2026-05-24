@@ -33,17 +33,21 @@ write.csv(Diabetes_duration, "Diabetes_duration.csv", row.names = FALSE)
 ################诊断1 触摸屏 报告################
 # p6150_i0,p3894_i0,p3627_i0,p4056_i0,p2966_i0 
 # 医生诊断的心血管疾病和糖尿病
-Self_report_diagnosis=Self_report_diagnosis_p6150()
+Self_report_diagnosis=Self_report_diagnosis_p6150(path=NULL,instance=0)
 
 # p5901_i0 p5901_i1 p5901_i2 p5901_i3	
 # Age when diabetes-related eye disease diagnosed
 # 诊断出糖尿病相关眼病的年龄
 Self_report_DR_diagnosis=Self_report_DR_diagnosis()
 
+# p2453_i0~3
+# 医生诊断的癌症
+Self_report_Cancer=Self_report_Cancer_p2453(path=NULL,instance=0)
+
 ################诊断1 触摸屏 药物################
 # 6177	胆固醇、血压或糖尿病的药物
 # 6153	胆固醇、血压、糖尿病的药物，或者服用外源性激素
-Self_report_drug=Self_report_drug_p6177_p6153()
+Self_report_drug=Self_report_drug_p6177_p6153(path=NULL,instance=0) 
 
 # pain_meds止痛药包括c("Aspirin", "Ibuprofen (e.g. Nurofen)", "Paracetamol", "Codeine")
 # stomach_meds胃药包括c("Ranitidine (e.g. Zantac)","Omeprazole (e.g. Zanprol)","Laxatives (e.g. Dulcolax, Senokot)")
@@ -531,6 +535,8 @@ First_occurrences_diag_date=First_occurrences_multiple_disease_diagnosis(path=pa
 ################诊断6 死亡原因和日期年龄################
 # 创建诊断列
 Death=death_diagnosis(time, ICD10_code_list)
+# 计算特定疾因死亡随访
+Death_followup=calculate_disease_followup(Death,time)
 
 ################诊断7 住院诊断和首次住院日期################
 # 一次性处理所有非癌症疾病 这里只有最细的诊断
@@ -802,7 +808,9 @@ final_combined_age=combine_disease_ages(time,
 write.csv(final_combined_age, "combined_diseases_age_data.csv", row.names = FALSE)
 
 ################合并age随访时间和date随访时间################
-combined_result=merge_disease_dataframes(final_combined_date, final_combined_age)
+combined_result=merge_disease_dataframes(final_combined_date,
+                                         final_combined_age,
+                                         combine_multi_disease = T)
 write.csv(combined_result, "combined_result.csv", row.names = FALSE)
 
 ################批量合并age随访时间和date随访时间################
@@ -946,6 +954,9 @@ kidney_function_poor=subset(kidney_function,
                               uacr_mg_g>=30)
 kidney_function_healthy=subset(kidney_function,!(eid%in%kidney_function_poor$eid))
 
+################计算虚弱指数 基于49项################
+FI_49=calculate_FI_49(path=NULL,instance=0)
+  
 ################计算 GOLD ProtAge################
 GOLD_ProtAge=calculate_GOLD_ProtAge(path = NULL)
 
@@ -981,6 +992,10 @@ BioAge_Acceleration=calculate_BioAge_Acceleration(data=df,
                                                      extreme_threshold = 1.5,
                                                      method="linear",
                                                      id = "eid")
+
+################出生队列分组################
+Birth_cohort_group=extract_Birth_cohort_group(window_start = "195110",
+                                              window_end   = "195603")
 
 ################环境污染################
 #####水质
@@ -1084,6 +1099,16 @@ Family_history=family_illnesses[["Family_history"]]
 Father_history=family_illnesses[["Father"]]
 Mother_history=family_illnesses[["Mother"]]
 
+################早年生活因素################
+# 是否被收养（使用instance0~3汇总得到，有一次回答是被收养的，则认为是被收养的）
+Adopted_as_a_child=extract_Adopted_as_a_child(path = NULL)
+
+# 出生地，英国出生则有坐标，其他国家出生的具体国家名
+Birth_country <- extract_Birth_country(path = NULL)
+
+# 7种早年生活因素
+Early_life_factors=extract_Early_life_factors(path = NULL)
+  
 ################处理日晒相关变量################
 # Field ID	描述	Description
 # p1050_i0	夏季在户外的时间	Time_spend_outdoors_in_summer
@@ -1101,6 +1126,32 @@ processed_data=sun_exposure_data(data)
 ################40个遗传主成分################
 # Genetic principal components 遗传主成分（共40个，一般纳入前20个做协变量）
 GPC=Genetic_principal_components(n=20)
+
+################读取处理代谢组数据################
+# 代谢物质控
+NMR_data=NMR_process(path = NULL)
+# 代谢物信息
+NMR_info=NMR_data[["nmr_info"]]
+# 代谢物矩阵
+NMR=NMR_data$biomarkers
+# 提取instance0
+NMR_i0=NMR %>%
+  dplyr::filter(visit_index==0) %>%
+  dplyr::select(-visit_index)
+# 提取instance1
+NMR_i1=NMR %>%
+  dplyr::filter(visit_index==1) %>%
+  dplyr::select(-visit_index)
+
+# 查看缺失情况
+miss=calculate_missing_rate(NMR_i0)
+# 按照标准删除缺失样本/变量
+NMR_i0=remove_by_missing(NMR_i0,
+                         max_col_missing = 0.2,# 变量(列)缺失率阈值
+                         max_row_missing = 0.5,# 样本(行)缺失率阈值
+                         exclude_cols = "eid")
+# 中位数插补
+NMR_i0=impute_median(NMR_i0)
 
 ################读取处理蛋白组数据################
 protein_data=extract_protein_data(path = NULL, 
