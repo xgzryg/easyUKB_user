@@ -881,7 +881,6 @@ CKM_stage=calculate_CKM_stage(path = NULL,instance = 0,
 ################睡眠不足################
 sleep=extract_sleep_durations(path = NULL,instance = 0,hours=6)
 
-
 ################代谢综合征基线诊断################
 mets_data=calculate_metabolic_syndrome(instance = 0)
 
@@ -956,7 +955,7 @@ kidney_function_healthy=subset(kidney_function,!(eid%in%kidney_function_poor$eid
 
 ################计算虚弱指数 基于49项################
 FI_49=calculate_FI_49(path=NULL,instance=0)
-  
+
 ################计算 GOLD ProtAge################
 GOLD_ProtAge=calculate_GOLD_ProtAge(path = NULL)
 
@@ -1099,6 +1098,57 @@ Family_history=family_illnesses[["Family_history"]]
 Father_history=family_illnesses[["Father"]]
 Mother_history=family_illnesses[["Mother"]]
 
+################ 计算 GAD-7 评分 ################
+# 关键参数：
+# min_valid 最少有效条目数, 默认 5
+# symptom_threshold 单项阳性阈值, 默认 1
+# positive_threshold 总分阳性阈值, 默认 10
+gad7_result <- calculate_GAD7(path = NULL,
+                              min_valid = 5,
+                              symptom_threshold = 1,
+                              positive_threshold = 10)
+# 输出包含以下列：
+# - eid: 参与者编号
+# - GAD7_nervous_score, GAD7_worry_control_score, ... : 各条目得分 (0-3)
+# - GAD7_score: 总分 (0-21)
+# - GAD7_positive: 总分≥10为阳性 (1/0)
+# - GAD7_n_symptoms: 阳性症状数 (得分≥1的条目数)
+
+################ 计算 PHQ-4 评分 ################
+# 关键参数：
+# instance: 评估实例 (0/1/2/3)，默认 0
+# min_valid: 最少有效条目数，默认 3
+phq4_result <- calculate_PHQ4(path = NULL,
+                              instance = 0,
+                              min_valid = 3)
+
+# 输出包含以下列：
+# - eid: 参与者编号
+# - PHQ4_depressed_score, PHQ4_unenthusiasm_score,
+#   PHQ4_tenseness_score, PHQ4_tiredness_score: 各条目得分 (0-3)
+# - PHQ4_score: 总分 (0-12)
+# - PHQ4_depression_score: 抑郁子量表 (0-6)
+# - PHQ4_anxiety_score: 焦虑子量表 (0-6)
+# - PHQ4_positive: 总分≥6为阳性 (1/0)
+# - PHQ4_depression_positive: 抑郁子量表≥3为阳性 (1/0)
+# - PHQ4_anxiety_positive: 焦虑子量表≥3为阳性 (1/0)
+
+################ 计算 PHQ-9 评分 ################
+# 关键参数：
+# min_valid 最少有效条目数, 默认 7
+# symptom_threshold 单项阳性阈值, 默认 1
+# positive_threshold 总分阳性阈值, 默认 10
+phq9_result <- calculate_PHQ9(path = NULL,
+                              min_valid = 7,
+                              symptom_threshold = 1,
+                              positive_threshold = 10)
+# 输出包含以下列：
+# - eid: 参与者编号
+# - PHQ9_anhedonia_score, PHQ9_depressed_score, ... : 各条目得分 (0-3)
+# - PHQ9_score: 总分 (0-27)
+# - PHQ9_positive: 总分≥10为阳性 (1/0)
+# - PHQ9_n_symptoms: 阳性症状数 (得分≥1的条目数)
+
 ################早年生活因素################
 # 是否被收养（使用instance0~3汇总得到，有一次回答是被收养的，则认为是被收养的）
 Adopted_as_a_child=extract_Adopted_as_a_child(path = NULL)
@@ -1108,7 +1158,28 @@ Birth_country <- extract_Birth_country(path = NULL)
 
 # 7种早年生活因素
 Early_life_factors=extract_Early_life_factors(path = NULL)
-  
+
+################糖限制出生队列分组################
+# 提取出生队列1951.10~1956.03
+Birth_cohort_group=extract_Birth_cohort_group(window_start = "195110",
+                                              window_end   = "195603")
+cohort_group=Birth_cohort_group %>%
+  dplyr::filter(group=='Inside_window')
+
+# 生成暴露编码
+cohort_group_BMJ=calculate_Sugar_Rationing(cohort_group,
+                                           paper = c("BMJ"),
+                                           return_all = T)
+cohort_group_Science=calculate_Sugar_Rationing(cohort_group,
+                                               paper = c("Science"),
+                                               return_all = T)
+cohort_group_NC=calculate_Sugar_Rationing(cohort_group,
+                                          paper = c("NC"),
+                                          return_all = T)
+
+#查看每篇论文的分组编码信息
+data(Sugar_restriction_encoding)
+
 ################处理日晒相关变量################
 # Field ID	描述	Description
 # p1050_i0	夏季在户外的时间	Time_spend_outdoors_in_summer
