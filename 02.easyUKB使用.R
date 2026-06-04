@@ -902,7 +902,7 @@ baseline_hypertension=diagnose_baseline_hypertension(instance=0)
 IR_indices=calculate_IR_indices(instance=0)
 
 ################估计葡萄糖处理率 (eGDR)################
-eGDR=calculate_eGDR(path = "./ukb", instance = 0)
+eGDR=calculate_eGDR(instance = 0)
 
 ################一站式计算多种衍生指标################
 data(Derived_Variable_Description)
@@ -1149,6 +1149,16 @@ phq9_result <- calculate_PHQ9(path = NULL,
 # - PHQ9_positive: 总分≥10为阳性 (1/0)
 # - PHQ9_n_symptoms: 阳性症状数 (得分≥1的条目数)
 
+################提取UKB预先计算的PRS################
+# 1) 全部 PRS（默认）
+PRS_All <- extract_PRS(prs_type = "all") # 90 个
+# 2) 仅 Standard
+PRS_Standard <- extract_PRS(prs_type = "Standard") # 39 个
+# 3) 仅 Enhanced
+PRS_Enhanced <- extract_PRS(prs_type = "Enhanced") # 51 个
+# 4) 二者都取
+PRS_both <- extract_PRS(prs_type = c("Standard", "Enhanced")) # 90 个
+
 ################早年生活因素################
 # 是否被收养（使用instance0~3汇总得到，有一次回答是被收养的，则认为是被收养的）
 Adopted_as_a_child=extract_Adopted_as_a_child(path = NULL)
@@ -1222,7 +1232,7 @@ NMR_i0=remove_by_missing(NMR_i0,
                          max_row_missing = 0.5,# 样本(行)缺失率阈值
                          exclude_cols = "eid")
 # 中位数插补
-NMR_i0=impute_median(NMR_i0)
+NMR_i0=impute_median(NMR_i0$data)
 
 ################读取处理蛋白组数据################
 protein_data=extract_protein_data(path = NULL, 
